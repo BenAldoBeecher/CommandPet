@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:padding="24dp"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CommandPet"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvEstadoConexion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Desconectado"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="#D32F2F"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado del plato"
+        android:textSize="14sp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tvEstadoPlato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="---"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvDistancia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Distancia: -- cm"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/tvDispensadoHoy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dispensado hoy: 0 veces"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/btnConectar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="Conectar Bluetooth" />
+
+    <Button
+        android:id="@+id/btnDispensar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="Dispensar comida"
+        android:enabled="false" />
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="Volver al menú" />
+
+</LinearLayout>
