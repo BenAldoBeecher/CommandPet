@@ -32,7 +32,10 @@ class ResultActivity : AppCompatActivity() {
         if (lista.isEmpty()) {
             txtHistorial.text = "Aún no hay registros de dispensación guardados."
         } else {
-            txtHistorial.text = lista.joinToString("\n\n")
+            val texto = lista.joinToString("\n\n") { item ->
+                "• [${item.fechaHora}]\n  Tipo: ${item.tipo} | Distancia: ${item.distancia} cm | Plato: ${item.estado}"
+            }
+            txtHistorial.text = texto
         }
     }
 }

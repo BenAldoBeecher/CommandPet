@@ -105,21 +105,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return resultado != -1L
     }
 
-    fun obtenerHistorial(): List<String> {
-        val lista = ArrayList<String>()
+    fun obtenerHistorial(): List<Dispensacion> {
+        val lista = ArrayList<Dispensacion>()
         val db = readableDatabase
         val cursor = db.rawQuery(
-            "SELECT $COL_FECHA_HORA, $COL_TIPO, $COL_DISTANCIA, $COL_ESTADO FROM $TABLA_HISTORIAL ORDER BY $COL_ID_HISTORIAL DESC",
+            "SELECT $COL_ID_HISTORIAL, $COL_FECHA_HORA, $COL_TIPO, $COL_DISTANCIA, $COL_ESTADO FROM $TABLA_HISTORIAL ORDER BY $COL_ID_HISTORIAL DESC",
             null
         )
 
         if (cursor.moveToFirst()) {
             do {
-                val fecha = cursor.getString(0)
-                val tipo = cursor.getString(1)
-                val dist = cursor.getFloat(2)
-                val est = cursor.getString(3)
-                lista.add("• [$fecha]\n  Tipo: $tipo | Distancia: $dist cm | Plato: $est")
+                val item = Dispensacion(
+                    id = cursor.getInt(0),
+                    fechaHora = cursor.getString(1),
+                    tipo = cursor.getString(2),
+                    distancia = cursor.getFloat(3),
+                    estado = cursor.getString(4)
+                )
+                lista.add(item)
             } while (cursor.moveToNext())
         }
         cursor.close()
