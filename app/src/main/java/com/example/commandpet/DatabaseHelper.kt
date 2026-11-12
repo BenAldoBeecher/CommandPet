@@ -13,10 +13,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "commandpet.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
 
         const val TABLA_USUARIOS = "usuarios"
         const val COL_ID_USUARIO = "id"
+        const val COL_NOMBRE = "nombre"
+        const val COL_APELLIDO = "apellido"
+        const val COL_EMAIL = "email"
         const val COL_USUARIO = "usuario"
         const val COL_PASSWORD = "password_hash"
 
@@ -32,6 +35,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val sqlCrearUsuarios = """
             CREATE TABLE $TABLA_USUARIOS (
                 $COL_ID_USUARIO INTEGER PRIMARY KEY AUTOINCREMENT,
+                $COL_NOMBRE TEXT,
+                $COL_APELLIDO TEXT,
+                $COL_EMAIL TEXT,
                 $COL_USUARIO TEXT UNIQUE,
                 $COL_PASSWORD TEXT
             )
@@ -50,6 +56,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL(sqlCrearHistorial)
 
         val cv = ContentValues().apply {
+            put(COL_NOMBRE, "Administrador")
+            put(COL_APELLIDO, "Sistema")
+            put(COL_EMAIL, "admin@commandpet.com")
             put(COL_USUARIO, "admin")
             put(COL_PASSWORD, cifrarSHA256("admin123"))
         }
@@ -68,9 +77,18 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return hashBytes.joinToString("") { "%02x".format(it) }
     }
 
-    fun registrarUsuario(usuario: String, contrasena: String): Boolean {
+    fun registrarUsuario(
+        nombre: String,
+        apellido: String,
+        email: String,
+        usuario: String,
+        contrasena: String
+    ): Boolean {
         val db = writableDatabase
         val cv = ContentValues().apply {
+            put(COL_NOMBRE, nombre)
+            put(COL_APELLIDO, apellido)
+            put(COL_EMAIL, email)
             put(COL_USUARIO, usuario)
             put(COL_PASSWORD, cifrarSHA256(contrasena))
         }

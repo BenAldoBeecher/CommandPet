@@ -59,26 +59,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnRegistrar.setOnClickListener {
-            val usuario = edtUsuario.text.toString().trim()
-            val password = edtPassword.text.toString().trim()
-
-            if (usuario.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Ingresa usuario y contraseña para registrarte", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (password.length < 4) {
-                edtPassword.error = "La contraseña debe tener al menos 4 caracteres"
-                return@setOnClickListener
-            }
-
-            val registrado = dbHelper.registrarUsuario(usuario, password)
-
-            if (registrado) {
-                Toast.makeText(this, "Usuario registrado con éxito. ¡Ahora presiona Ingresar!", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, "El nombre de usuario ya está registrado", Toast.LENGTH_SHORT).show()
-            }
+            val intent = Intent(this, RegistroActivity::class.java)
+            startActivity(intent)
         }
     }
 }
