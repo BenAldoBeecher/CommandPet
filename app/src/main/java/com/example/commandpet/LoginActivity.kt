@@ -63,4 +63,9 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
+    }
 }

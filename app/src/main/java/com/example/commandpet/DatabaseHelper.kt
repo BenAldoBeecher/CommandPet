@@ -9,65 +9,43 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
-    companion object {
-        private const val DATABASE_NAME = "commandpet.db"
-        private const val DATABASE_VERSION = 2
-
-        const val TABLA_USUARIOS = "usuarios"
-        const val COL_ID_USUARIO = "id"
-        const val COL_NOMBRE = "nombre"
-        const val COL_APELLIDO = "apellido"
-        const val COL_EMAIL = "email"
-        const val COL_USUARIO = "usuario"
-        const val COL_PASSWORD = "password_hash"
-
-        const val TABLA_HISTORIAL = "historial"
-        const val COL_ID_HISTORIAL = "id"
-        const val COL_FECHA_HORA = "fecha_hora"
-        const val COL_TIPO = "tipo"
-        const val COL_DISTANCIA = "distancia"
-        const val COL_ESTADO = "estado"
-    }
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "commandpet.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        val sqlCrearUsuarios = """
-            CREATE TABLE $TABLA_USUARIOS (
-                $COL_ID_USUARIO INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COL_NOMBRE TEXT,
-                $COL_APELLIDO TEXT,
-                $COL_EMAIL TEXT,
-                $COL_USUARIO TEXT UNIQUE,
-                $COL_PASSWORD TEXT
+        db.execSQL("""
+            CREATE TABLE usuarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT,
+                apellido TEXT,
+                email TEXT,
+                usuario TEXT UNIQUE,
+                password_hash TEXT
             )
-        """.trimIndent()
-        db.execSQL(sqlCrearUsuarios)
+        """.trimIndent())
 
-        val sqlCrearHistorial = """
-            CREATE TABLE $TABLA_HISTORIAL (
-                $COL_ID_HISTORIAL INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COL_FECHA_HORA TEXT,
-                $COL_TIPO TEXT,
-                $COL_DISTANCIA REAL,
-                $COL_ESTADO TEXT
+        db.execSQL("""
+            CREATE TABLE historial (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                fecha_hora TEXT,
+                tipo TEXT,
+                distancia REAL,
+                estado TEXT
             )
-        """.trimIndent()
-        db.execSQL(sqlCrearHistorial)
+        """.trimIndent())
 
         val cv = ContentValues().apply {
-            put(COL_NOMBRE, "Administrador")
-            put(COL_APELLIDO, "Sistema")
-            put(COL_EMAIL, "admin@commandpet.com")
-            put(COL_USUARIO, "admin")
-            put(COL_PASSWORD, cifrarSHA256("admin123"))
+            put("nombre", "Administrador")
+            put("apellido", "Sistema")
+            put("email", "admin@commandpet.com")
+            put("usuario", "admin")
+            put("password_hash", cifrarSHA256("admin123"))
         }
-        db.insert(TABLA_USUARIOS, null, cv)
+        db.insert("usuarios", null, cv)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLA_USUARIOS")
-        db.execSQL("DROP TABLE IF EXISTS $TABLA_HISTORIAL")
+        db.execSQL("DROP TABLE IF EXISTS usuarios")
+        db.execSQL("DROP TABLE IF EXISTS historial")
         onCreate(db)
     }
 
@@ -86,13 +64,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     ): Boolean {
         val db = writableDatabase
         val cv = ContentValues().apply {
-            put(COL_NOMBRE, nombre)
-            put(COL_APELLIDO, apellido)
-            put(COL_EMAIL, email)
-            put(COL_USUARIO, usuario)
-            put(COL_PASSWORD, cifrarSHA256(contrasena))
+            put("nombre", nombre)
+            put("apellido", apellido)
+            put("email", email)
+            put("usuario", usuario)
+            put("password_hash", cifrarSHA256(contrasena))
         }
-        val resultado = db.insert(TABLA_USUARIOS, null, cv)
+        val resultado = db.insert("usuarios", null, cv)
         return resultado != -1L
     }
 
@@ -101,7 +79,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val hash = cifrarSHA256(contrasena)
 
         val cursor = db.rawQuery(
-            "SELECT * FROM $TABLA_USUARIOS WHERE $COL_USUARIO = ? AND $COL_PASSWORD = ?",
+            "SELECT * FROM usuarios WHERE usuario = ? AND password_hash = ?",
             arrayOf(usuario, hash)
         )
         val existe = cursor.count > 0
@@ -114,12 +92,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val fechaActual = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date())
 
         val cv = ContentValues().apply {
-            put(COL_FECHA_HORA, fechaActual)
-            put(COL_TIPO, tipo)
-            put(COL_DISTANCIA, distancia)
-            put(COL_ESTADO, estado)
+            put("fecha_hora", fechaActual)
+            put("tipo", tipo)
+            put("distancia", distancia)
+            put("estado", estado)
         }
-        val resultado = db.insert(TABLA_HISTORIAL, null, cv)
+        val resultado = db.insert("historial", null, cv)
         return resultado != -1L
     }
 
@@ -127,7 +105,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val lista = ArrayList<Dispensacion>()
         val db = readableDatabase
         val cursor = db.rawQuery(
-            "SELECT $COL_ID_HISTORIAL, $COL_FECHA_HORA, $COL_TIPO, $COL_DISTANCIA, $COL_ESTADO FROM $TABLA_HISTORIAL ORDER BY $COL_ID_HISTORIAL DESC",
+            "SELECT id, fecha_hora, tipo, distancia, estado FROM historial ORDER BY id DESC",
             null
         )
 

@@ -1,6 +1,7 @@
 package com.example.commandpet
 
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -47,8 +48,8 @@ class RegistroActivity : AppCompatActivity() {
                 edtApellido.error = "Ingrese su apellido"
                 return@setOnClickListener
             }
-            if (email.isEmpty()) {
-                edtEmail.error = "Ingrese su correo"
+            if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                edtEmail.error = "Ingrese un correo válido"
                 return@setOnClickListener
             }
             if (usuario.isEmpty()) {
@@ -72,5 +73,10 @@ class RegistroActivity : AppCompatActivity() {
         btnVolverLogin.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
     }
 }

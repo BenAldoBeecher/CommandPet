@@ -310,5 +310,6 @@ class ControlActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         desconectar()
+        dbHelper.close()
     }
 }
