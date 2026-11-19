@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "commandpet.db", null, 1) {
+class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, "commandpet.db", null, 2) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
